@@ -23,7 +23,7 @@ services:
     networks:
       - backend
     ports:
-      - "8084:3000"
+      - "8024:3000"
       - "4484:3001"
 #    command: ["sh", "-c", "node /usr/src/app/bin/wait-for-it.js db 5432  && npm run-script start"]
 
