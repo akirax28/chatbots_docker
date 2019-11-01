@@ -20,7 +20,7 @@ services:
   mongodb:
     image: mongo
     environment:
-      MONGODB_DBNAME=chatbots
+      - MONGODB_DBNAME=chatbots
     networks:
       - mongo
     volumes:
