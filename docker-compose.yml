@@ -24,7 +24,7 @@ services:
     networks:
       - mongo
     volumes:
-      datamongo:/data/db
+      - datamongo:/data/db
 
 networks:
   mongo:
