@@ -1,33 +1,46 @@
 version: '3.7'
 services:
-  chatbots:
-    image: labsai/eddi:latest
-    ports:
-      - "8024:7070"
-      - "7443:7443"
-    depends_on:
-      - mongodb
+  servicebot:
+    image: servicebot/servicebot
     environment:
-      EDDI_VERSION: 4.8
-      EDDI_ENV: production
-      EDDI_MEMORY_MIN: 1G
-      EDDI_MEMORY_MAX: 1G
-      #EDDI_JAVA_ENV_MONGODB_HOST: mongodb.hosts=mongodb
-      EDDI_JAVA_ENV_BASIC_AUTH_ENABLED: webServer.securityHandlerType=basic
-    networks:
-      - mongo
-
-  mongodb:
-    image: mongo
-    environment:
-      - MONGODB_DBNAME=chatbots
-    networks:
-      - mongo
+#      CERTIFICATES: "./ssl/"
+      POSTGRES_DB_PORT : "5432"
+      POSTGRES_DB_HOST : "db"
+      POSTGRES_DB_USER : "servicebot_u"
+      POSTGRES_DB_PASSWORD : "secret_doggo"
+      POSTGRES_DB_NAME : "sb_db"
+#      SMTP_HOST : 'localhost'
+#      SMTP_USER : 'postmaster@localhost'
+#      SMTP_PASSWORD : 'password'
+#      SMTP_PORT : '587'
+      PORT : "3000"
     volumes:
-      - datamongo:/data/db
+      - upload-data:/usr/src/app/uploads
+      - environment-file:/usr/src/app/env
+#      - /path/to/ssl/certs/on/server:/usr/src/app/ssl
+    links:
+      - db
+    ports:
+      - "80:3000"
+      - "443:3001"
+#    command: ["sh", "-c", "node /usr/src/app/bin/wait-for-it.js db 5432  && npm run-script start"]
 
-networks:
-  mongo:
-    driver: overlay
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER : "servicebot_u"
+      POSTGRES_PASSWORD : "secret_doggo"
+      POSTGRES_DB : "sb_db"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
 volumes:
-  datamongo:
+  upload-data:
+  environment-file:
+  db-data:
+networks:
+  backend:
+    driver: overlay
