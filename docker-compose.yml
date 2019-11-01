@@ -25,7 +25,7 @@ services:
     ports:
       - "9024:3000"
       - "4484:3001"
-#    command: ["sh", "-c", "node /usr/src/app/bin/wait-for-it.js db 5432  && npm run-script start"]
+    command: ["sh", "-c", "node /usr/src/app/bin/wait-for-it.js db 5432  && npm run-script start"]
 
   db:
     image: postgres
